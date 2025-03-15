@@ -20,13 +20,14 @@ import CustomInput from "./CustomInput";
 import { AuthformSchema } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { signUp } from "@/lib/actions/user.actions";
+import { signIn, signUp } from "@/lib/actions/user.actions";
 
 const AuthForm = ({ type }: AuthFormProps) => {
   const router = useRouter();
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const formSchema = AuthformSchema(type);
+  const [errorMessage, setErrorMessage] = useState("");
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -39,6 +40,7 @@ const AuthForm = ({ type }: AuthFormProps) => {
 
   // 2. Define a submit handler.
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    setErrorMessage(""); // Clear previous errors
     setIsLoading(true);
 
     try {
@@ -48,15 +50,29 @@ const AuthForm = ({ type }: AuthFormProps) => {
       }
 
       if (type === "sign-in") {
-        const userData = {
-          email: data.email,
-          password: data.password,
-        };
-        const response = await signIn(userData);
-        if (response) router.push('/')
+        try {
+          setIsLoading(true);
+          const response = await signIn({
+            email: data.email,
+            password: data.password,
+          });
+
+          if (response.code === 401) {
+            setErrorMessage("Invalid credentials. Please try again.");
+            return;
+          }
+
+          console.log(response);
+          router.push("/");
+        } catch (error) {
+          console.error("Unhandled error:", error);
+          setErrorMessage("Invalid credentials. Please try again.");
+        } finally {
+          setIsLoading(false);
+        }
       }
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     } finally {
       setIsLoading(false);
     }
@@ -96,7 +112,7 @@ const AuthForm = ({ type }: AuthFormProps) => {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               {type === "sign-up" && (
                 <>
-                  <div className="flex gap-4">
+                  <div className="flex w-full gap-4">
                     <CustomInput
                       control={form.control}
                       name="firstName"
@@ -166,6 +182,9 @@ const AuthForm = ({ type }: AuthFormProps) => {
                 placeholder="Enter your password"
               />
               <div className="flex flex-col gap-4">
+                {errorMessage && (
+                  <div className="error-message">{errorMessage}</div>
+                )}
                 <Button type="submit" className="form-btn" disabled={isLoading}>
                   {isLoading ? (
                     <>

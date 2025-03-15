@@ -278,6 +278,9 @@
   .auth-form {
     @apply flex min-h-screen w-full max-w-[420px] flex-col justify-center gap-5 py-10 md:gap-8;
   }
+  .error-message {
+    @apply mt-2 w-full text-center text-red-600 bg-red-100 border border-red-400 px-4 py-2 rounded-lg;
+  }
 
   .form-item {
     @apply flex flex-col gap-1.5;
