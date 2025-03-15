@@ -1,24 +1,11 @@
 import HeaderBox from "@/components/HeaderBox";
 import RightSideBar from "@/components/RightSideBar";
 import TotalBalanceBox from "@/components/TotalBalanceBox";
+import { getLoggedInUser } from "@/lib/actions/user.actions";
 import React from "react";
 
-const Home = () => {
-  const loggedIn = {
-    firstName: "Dev",
-    lastName: "Chawla",
-    email: "devchawla.04@gmail.com",
-    $id: "123",
-    userId: "1233",
-    dwollaCustomerUrl: "1233",
-    dwollaCustomerId: "1233",
-    address1: "1233",
-    city: "1233",
-    state: "1233",
-    postalCode: "1233",
-    dateOfBirth: "1233",
-    ssn: "1233",
-  };
+const Home = async () => {
+  const loggedIn = await getLoggedInUser();
   const banks: (Bank & Account)[] = [
     {
       $id: "1",
@@ -68,7 +55,7 @@ const Home = () => {
             <HeaderBox
               type="greeting"
               title="Welcome"
-              user={loggedIn?.firstName || "Guest"}
+              user={loggedIn?.name || "Guest"}
               subtext="Access and manage your account and transactions efficiently."
             />
             <TotalBalanceBox
