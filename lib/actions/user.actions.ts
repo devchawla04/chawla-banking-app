@@ -54,10 +54,18 @@ export async function getLoggedInUser() {
 
 export const logoutAccount = async () => {
   try {
-    const { account } = await createSessionClient();
+    const sessionClient = await createSessionClient();
+    if (!sessionClient?.account) throw new Error("Session client not initialized");
+
+    const { account } = sessionClient;
+
     cookies().delete("appwrite-session");
+
     await account.deleteSession("current");
+
+    return true; 
   } catch (error) {
-    return null;
+    console.error("Logout failed:", error);
+    return false; 
   }
 };
