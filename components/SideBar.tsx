@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import Link from "next/link";
 import React from "react";
 import Image from "next/image";
@@ -6,6 +6,7 @@ import { sidebarLinks } from "@/constants";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import Footer from "./Footer";
+import PlaidLink from "./PlaidLink";
 
 const SideBar = ({ user }: SiderbarProps) => {
   const pathName = usePathname();
@@ -31,23 +32,21 @@ const SideBar = ({ user }: SiderbarProps) => {
               href={item.route}
               key={item.label}
             >
-             <div className="relative size-6">
-                <Image 
-                src={item.imgURL}
-                alt={item.label} 
-                fill
-                className={cn({'brightness-[3] invert-0' : isActive})}
+              <div className="relative size-6">
+                <Image
+                  src={item.imgURL}
+                  alt={item.label}
+                  fill
+                  className={cn({ "brightness-[3] invert-0": isActive })}
                 />
-             </div>
-             <p className={cn('sidebar-label',{'!text-white': isActive})}>
+              </div>
+              <p className={cn("sidebar-label", { "!text-white": isActive })}>
                 {item.label}
-
-             </p>
+              </p>
             </Link>
           );
         })}
-
-        USER
+        <PlaidLink user={user} />
       </nav>
 
       <Footer user={user} type="desktop" />
