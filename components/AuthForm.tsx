@@ -124,7 +124,7 @@ const AuthForm = ({ type }: AuthFormProps) => {
             onClick={handleClick}
             className="cursor-pointer text-2xl font-bold text-blue-500 hover:text-blue-700 transition-colors"
           >
-            I'll Link Bank Later
+             Link Bank Account Later
           </h1>
         </div>
       ) : (
