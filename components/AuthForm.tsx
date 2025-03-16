@@ -38,6 +38,9 @@ const AuthForm = ({ type }: AuthFormProps) => {
       password: "",
     },
   });
+  const handleClick = () => {
+    router.push("/");
+  };
 
   // 2. Define a submit handler.
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
@@ -56,7 +59,7 @@ const AuthForm = ({ type }: AuthFormProps) => {
           dateOfBirth: data.dateOfBirth!,
           ssn: data.ssn!,
           email: data.email,
-          password: data.password
+          password: data.password,
         };
         const newUser = await signUp(userData);
         setUser(newUser);
@@ -117,6 +120,12 @@ const AuthForm = ({ type }: AuthFormProps) => {
       {user ? (
         <div className="flex-col flex gap-4">
           <PlaidLink user={user} variant="primary" dwollaCustomerId="" />
+          <h1
+            onClick={handleClick}
+            className="cursor-pointer text-2xl font-bold text-blue-500 hover:text-blue-700 transition-colors"
+          >
+            I'll Link Bank Later
+          </h1>
         </div>
       ) : (
         <>
