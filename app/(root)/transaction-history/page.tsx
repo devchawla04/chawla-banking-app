@@ -46,7 +46,7 @@ const TransactionHistory = async ({
       <div className="space-y-6">
         <div className="transactions-account">
           <div className="flex flex-col gap-2">
-            {accounts?.data?.map((account, index) => (
+            {accounts?.data?.map((account : any, index : number) => (
               <div key={index} className="flex flex-col gap-2">
                 <h2 className="text-18 font-bold text-white">
                   {account?.name}
