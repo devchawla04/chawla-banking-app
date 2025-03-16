@@ -9,6 +9,12 @@ export const signIn = async ({ email, password }: signInProps) => {
   try {
     const { account } = await createAdminClient();
     const response = await account.createEmailPasswordSession(email, password);
+    cookies().set("appwrite-session", response.secret, {
+      path: "/",
+      httpOnly: true,
+      sameSite: "strict",
+      secure: true,
+    });
     return parseStringify(response);
   } catch (error) {
     console.log("Error : ", error);
@@ -20,6 +26,7 @@ export const signUp = async (userData: SignUpParams) => {
   try {
     const { email, password, firstName, lastName } = userData;
     const { account } = await createAdminClient();
+    console.log("------> step 1 sign up")
 
     const newUserAccount = await account.create(
       ID.unique(),
@@ -27,7 +34,9 @@ export const signUp = async (userData: SignUpParams) => {
       password,
       `${firstName} ${lastName} `
     );
+    console.log("------> step 2 sign up")
     const session = await account.createEmailPasswordSession(email, password);
+    console.log("------> step 3 sign up")
 
     cookies().set("appwrite-session", session.secret, {
       path: "/",
@@ -39,6 +48,7 @@ export const signUp = async (userData: SignUpParams) => {
     return parseStringify(newUserAccount);
   } catch (error) {
     console.log("Error : ", error);
+    return error;
   }
 };
 
@@ -55,7 +65,8 @@ export async function getLoggedInUser() {
 export const logoutAccount = async () => {
   try {
     const sessionClient = await createSessionClient();
-    if (!sessionClient?.account) throw new Error("Session client not initialized");
+    if (!sessionClient?.account)
+      throw new Error("Session client not initialized");
 
     const { account } = sessionClient;
 
@@ -63,9 +74,9 @@ export const logoutAccount = async () => {
 
     await account.deleteSession("current");
 
-    return true; 
+    return true;
   } catch (error) {
     console.error("Logout failed:", error);
-    return false; 
+    return false;
   }
 };

@@ -6,13 +6,12 @@ import { useRouter } from "next/navigation";
 
 const Footer = ({ user, type }: FooterProps) => {
   const router = useRouter();
-//   const handleLogout = async () => {
-//     // const loggedOut = await logoutAccount();
-//     // if (loggedOut) {
-//     //   router.push("/sign-in");
-//     // }
-//    console.log("pressed")
-//   };
+  const handleLogout = async () => {
+    const loggedOut = await logoutAccount();
+    if (loggedOut) {
+      router.push("/sign-in");
+    }
+  };
 
   const newLocal = "text-14 truncate text-gray-700 font-semibold";
   return (
@@ -31,7 +30,7 @@ const Footer = ({ user, type }: FooterProps) => {
             {user?.email}
           </p>
         </div>
-        <div className="footer_image">
+        <div className="footer_image" onClick={handleLogout}>
           <Image src="icons/logout.svg" fill alt="chawla" />
         </div>
       </footer>

@@ -47,6 +47,7 @@ const AuthForm = ({ type }: AuthFormProps) => {
       if (type === "sign-up") {
         const newUser = await signUp(data);
         setUser(newUser);
+        router.push('/')
       }
 
       if (type === "sign-in") {
@@ -56,11 +57,6 @@ const AuthForm = ({ type }: AuthFormProps) => {
             email: data.email,
             password: data.password,
           });
-
-          if (response.code === 401) {
-            setErrorMessage("Invalid credentials. Please try again.");
-            return;
-          }
 
           console.log(response);
           router.push("/");
@@ -72,7 +68,9 @@ const AuthForm = ({ type }: AuthFormProps) => {
         }
       }
     } catch (error) {
-      //console.log(error);
+      setErrorMessage(
+        "User with this email already exist. Please login or try with another email"
+      );
     } finally {
       setIsLoading(false);
     }
