@@ -9,12 +9,12 @@ import React from "react";
 const Home = async ({ searchParams: { id, page } }: SearchParamProps) => {
   const currentPage = Number(page as string) || 1;
   const loggedIn = await getLoggedInUser();
-  const accounts = await getAccounts({ userId: loggedIn.$id });
+  var loggedInID = loggedIn?.$id;
+  const accounts = await getAccounts({ userId: loggedInID });
 
   if (!accounts) return;
   const accountsData = accounts?.data;
-  const appwriteItemId = (id as string) || accountsData[0]?.appwriteItemId;
-
+  const appwriteItemId = accountsData[0]?.appwriteItemId;
   const account = await getAccount({ appwriteItemId });
 
   return (
@@ -25,7 +25,7 @@ const Home = async ({ searchParams: { id, page } }: SearchParamProps) => {
             <HeaderBox
               type="greeting"
               title="Welcome"
-              user={loggedIn?.firstName || "Guest"}
+              user={`${loggedIn?.firstName} ${loggedIn.lastName}` || "Guest"}
               subtext="Access and manage your account and transactions efficiently."
             />
             <TotalBalanceBox
@@ -36,7 +36,7 @@ const Home = async ({ searchParams: { id, page } }: SearchParamProps) => {
           </header>
           <RecentTransactions
             accounts={accountsData}
-            transactions={account?.transactions}
+            transactions={accounts?.transactions}
             appwriteItemId={appwriteItemId}
             page={currentPage}
           />

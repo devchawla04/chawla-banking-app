@@ -1,18 +1,14 @@
+export const dynamic = "force-dynamic";
 import HeaderBox from '@/components/HeaderBox'
 import PaymentTransferForm from '@/components/PaymentTransferForm'
 import { getAccounts } from '@/lib/actions/bank.actions';
 import { getLoggedInUser } from '@/lib/actions/user.actions';
-import React from 'react'
 
-const Transfer = async () => {
+export default async function Transfer() {
   const loggedIn = await getLoggedInUser();
-  const accounts = await getAccounts({ 
-    userId: loggedIn.$id 
-  })
+  const accounts = await getAccounts({ userId: loggedIn.$id });
 
-  if(!accounts) return;
-  
-  const accountsData = accounts?.data;
+  if (!accounts) return null; // Ensure it doesn't return undefined
 
   return (
     <section className="payment-transfer">
@@ -20,12 +16,9 @@ const Transfer = async () => {
         title="Payment Transfer"
         subtext="Please provide any specific details or notes related to the payment transfer"
       />
-
       <section className="size-full pt-5">
-        <PaymentTransferForm accounts={accountsData} />
+        <PaymentTransferForm accounts={accounts.data} />
       </section>
     </section>
-  )
+  );
 }
-
-export default Transfer

@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import HeaderBox from '@/components/HeaderBox'
 import { Pagination } from '@/components/Pagination';
 import TransactionsTable from '@/components/TransactionsTable';
@@ -13,7 +14,9 @@ const TransactionHistory = async ({ searchParams: { id, page }}:SearchParamProps
     userId: loggedIn.$id 
   })
 
+  console.log("acccccount---------->",accounts);
   if(!accounts) return;
+
   
   const accountsData = accounts?.data;
   const appwriteItemId = (id as string) || accountsData[0]?.appwriteItemId;
@@ -42,18 +45,27 @@ const currentTransactions = account?.transactions.slice(
       <div className="space-y-6">
         <div className="transactions-account">
           <div className="flex flex-col gap-2">
-            <h2 className="text-18 font-bold text-white">{account?.data.name}</h2>
+            <h2 className="text-18 font-bold text-white">{accounts?.data[0]?.name}</h2>
             <p className="text-14 text-blue-25">
-              {account?.data.officialName}
+              {accounts?.data[0]?.officialName}
             </p>
             <p className="text-14 font-semibold tracking-[1.1px] text-white">
-              ●●●● ●●●● ●●●● {account?.data.mask}
+              ●●●● ●●●● ●●●● {accounts?.data[0]?.mask}
+            </p>
+          </div>
+          <div className="flex flex-col gap-2">
+            <h2 className="text-18 font-bold text-white">{accounts?.data[0]?.name}</h2>
+            <p className="text-14 text-blue-25">
+              {accounts?.data[1]?.officialName}
+            </p>
+            <p className="text-14 font-semibold tracking-[1.1px] text-white">
+              ●●●● ●●●● ●●●● {accounts?.data[1]?.mask}
             </p>
           </div>
           
           <div className='transactions-account-balance'>
-            <p className="text-14">Current balance</p>
-            <p className="text-24 text-center font-bold">{formatAmount(account?.data.currentBalance)}</p>
+            <p className="text-14">Total balance</p>
+            <p className="text-24 text-center font-bold">{formatAmount(accounts?.totalCurrentBalance)}</p>
           </div>
         </div>
 

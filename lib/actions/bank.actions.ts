@@ -75,10 +75,13 @@ export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
     });
     const accountData = accountsResponse.data.accounts[0];
 
+    const { $id: id } = bank;
+
     // get transfer transactions from appwrite
     const transferTransactionsData = await getTransactionsByBankId({
-      bankId: bank.$id,
+      bankId: id,
     });
+   
 
     const transferTransactions = transferTransactionsData.documents.map(
       (transferData: Transaction) => ({
